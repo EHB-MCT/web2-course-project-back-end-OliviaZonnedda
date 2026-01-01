@@ -1,30 +1,56 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const uri = "mongodb+srv://olivia:ipjXcBgjQrV0XfSh@cluster1.rle79lp.mongodb.net/?appName=Cluster1";
 
-const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
-});
+const { MongoClient } = require("mongodb");
 
-app.get('/', async (req, res) => {
+
+
+
+const client = new MongoClient(uri);
+const dbName = "Cluster1"
+async function run() {
     try {
-        // Connect the client to the server	(optional starting in v4.7)
+        // Connect to the Atlas cluster
         await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("cityBite").command({ ping: 1 });
-        await res.send('Pinged your deployment. You successfully connected to MongoDB!')
-    } finally {
-        // Ensures that the client will close when you finish/error
+        console.log("connected correctly toserver");
+        // Get the database and collection on which to run the operation
+        const db = client.db(dbName);
+        const col = db.collection("cityBite");
+
+        // Create new documents                                                                                                                                         
+        let cityBiteDocuments = {
+
+
+            restoName: "CLIFF",
+            restoHours: "08:00 - 20:00",
+            restoAdress: "Rue De La Montagne 8, 1000 Brussels ",
+            foodType: "Brunch",
+            description: "CLIFF is a well-known brunch café in central Brussels, just steps from the Grand Place. It serves modern brunch dishes, quality specialty coffee, and creative drinks in a cozy, contemporary space that attracts both locals and visitors throughout the week."
+
+        }
+
+
+        // Insert the documents into the specified collection        
+        const p = await col.insertOne(cityBiteDocuments);
+
+        // Find the document
+
+        const document = await col.findOne();
+
+        // Print results
+        console.log(document);
+
+    } catch (err) {
+        console.log(err.stack);
+    }
+
+    finally {
         await client.close();
     }
-})
+}
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+run().catch(console.dir);
+
