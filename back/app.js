@@ -60,6 +60,18 @@ async function startServer() {
             }
         })
 
+        app.get("/userList/one/:id", async (req, res) => {
+            try {
+                const id = new ObjectId(req.params.id);
+                const data = await userList.findOne({ '_id': id });
+                console.log(data);
+                res.json(data);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send("Can't read cityBite from database");
+            }
+        })
+
         app.get("/userList/:username", async (req, res) => {
             try {
                 const data = await userList.find({ username: req.params.username }).toArray();
