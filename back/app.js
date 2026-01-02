@@ -10,7 +10,8 @@ const { MongoClient, ObjectId } = require("mongodb");
 
 const { DATABASE_URI } = require('./config');
 
-const client = new MongoClient(DATABASE_URI);
+//const client = new MongoClient(DATABASE_URI);
+const client = new MongoClient(process.env.DATABASE_URI);
 const dbName = "cityBite"
 
 
