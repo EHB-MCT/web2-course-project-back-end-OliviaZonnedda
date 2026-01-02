@@ -2,11 +2,11 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const uri = "mongodb+srv://olivia:ipjXcBgjQrV0XfSh@cluster1.rle79lp.mongodb.net/?appName=Cluster1";
 const { MongoClient } = require("mongodb");
 
+const { DATABASE_URI } = require('./config');
 
-const client = new MongoClient(uri);
+const client = new MongoClient(DATABASE_URI);
 const dbName = "cityBite"
 
 
@@ -19,7 +19,7 @@ async function startServer() {
         const col = db.collection("foodSpot");
 
         app.get("/", (req, res) => {
-            res.send("jail!");
+            res.send("examen");
         });
 
 
