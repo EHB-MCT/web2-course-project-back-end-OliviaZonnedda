@@ -95,11 +95,17 @@ async function startServer() {
             }
         })
 
-        app.post("/userList", async (req, res) => {
+        app.post("/userList/:username/:id", async (req, res) => {
             try {
-                const data = await userList.insertOne(req.body);
-                console.log(data);
-                res.json(data);
+                const id = new ObjectId(req.params.id);
+                const data = await foodSpot.findOne({ '_id': id });
+                delete data._id;
+                data.username = req.params.username;
+
+                var result = await userList.insertOne(data);
+                console.log(result);
+                res.json(result);
+
             } catch (error) {
                 console.error(error);
                 res.status(500).send("Can't insert user  data from database");
